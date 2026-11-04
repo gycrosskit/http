@@ -2,7 +2,7 @@
 
 提供 Android、iOS、OpenHarmony 共用的 HTTP 契约、Ktor 传输、平台引擎、上传及失败分类。`http-core` 不提供 UI 或 Kuikly Module；业务 URL、品牌、登录凭据、隐私同意、日志脱敏与请求策略由宿主负责。
 
-当前为 **1.0.0 首个正式版本（待发布）**，不能视为已可从 JitPack 下载。平台合同见[功能与平台差异](docs/功能与平台差异.md)，构建、测试和发布入口见[开发与验证](docs/开发与验证.md)。
+当前正式版本 **1.0.0 已发布**，可从 JitPack 按下列固定坐标接入。公开产物核验与独立消费者编译已通过；宿主实际传输、接线和设备业务仍须分别验收。平台合同见[功能与平台差异](docs/功能与平台差异.md)，构建、测试和发布入口见[开发与验证](docs/开发与验证.md)。
 
 ## 架构与调用流程
 
@@ -48,7 +48,7 @@ classDiagram
 
 ## 安装与最小使用
 
-发布完成后的预期坐标（当前未发布）：
+正式版本坐标：
 
 ```kotlin
 repositories { maven("https://jitpack.io") }
@@ -85,6 +85,6 @@ try {
 
 ## 验证与反馈
 
-保留传输、超时、取消、JSON、上传及宿主 hook 的通用回归，并补默认/显式重试边界回归。独立 `verification-consumer` 不直接声明 Ktor、coroutines、serialization 主依赖，检验公开 API 的产物传递依赖。**1.0.0 尚待重新打包与实际 binary consumer 验证，公开坐标消费和设备验收未完成**；轻量脚本检查不能代替这些证据。
+保留传输、超时、取消、JSON、上传及宿主 hook 的通用回归，并补默认/显式重试边界回归。独立 `verification-consumer` 不直接声明 Ktor、coroutines、serialization 主依赖，检验公开 API 的产物传递依赖。**1.0.0 已通过公开产物核验与独立消费者编译**；轻量脚本、组件消费与宿主实际传输及设备验收分别记录，不能互相替代。
 
-发行入口：[Releases](https://github.com/gycrosskit/http/releases)（1.0.0 待发布）。问题反馈请通过 [Issues](https://github.com/gycrosskit/http/issues) 提供脱敏输入、平台、精确版本及异常原因；不要上传凭据或用户正文。源码抽离自宿主 `c768cb12c86e59b60fbc69149013850edce509b0`，许可证为 [Apache-2.0](LICENSE)。
+发行入口：[1.0.0 Release](https://github.com/gycrosskit/http/releases/tag/1.0.0)。问题反馈请通过 [Issues](https://github.com/gycrosskit/http/issues) 提供脱敏输入、平台、精确版本及异常原因；不要上传凭据或用户正文。源码抽离自宿主 `c768cb12c86e59b60fbc69149013850edce509b0`，许可证为 [Apache-2.0](LICENSE)。
