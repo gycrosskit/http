@@ -3,6 +3,7 @@ package com.dgtang.live.data.remote
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
+import java.io.IOException
 import java.security.KeyFactory
 import java.security.KeyStore
 import java.security.cert.CertificateFactory
@@ -37,7 +38,7 @@ class AndroidTlsCompatibilityTest {
                         socket.outputStream.write("HTTP/1.1 200 OK\r\nContent-Length: 2\r\nConnection: close\r\n\r\nok".toByteArray())
                         socket.outputStream.flush()
                     }
-                } catch (failure: SSLException) {
+                } catch (failure: IOException) {
                     if (!validate) throw failure
                 }
             }
