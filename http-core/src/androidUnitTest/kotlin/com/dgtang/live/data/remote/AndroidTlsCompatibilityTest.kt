@@ -1,6 +1,7 @@
 package com.dgtang.live.data.remote
 
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import java.io.IOException
@@ -22,6 +23,14 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class AndroidTlsCompatibilityTest {
+    @Test
+    fun originalNoArgumentJvmFactoryRemainsAvailable() {
+        // Kotlin 默认参数不保留旧 JVM 描述符；旧二进制消费者仍需真实无参方法。
+        val factory = Class.forName("com.dgtang.live.data.remote.AndroidHttpClientEngineKt")
+            .getMethod("createAndroidHttpClientEngine")
+        assertEquals(HttpClientEngine::class.java, factory.returnType)
+    }
+
     @Test
     fun defaultRejectsAndExplicitCompatibilityAcceptsUntrustedWrongHostCertificate() = runBlocking {
         for (validate in listOf(true, false)) {

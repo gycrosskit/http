@@ -9,7 +9,9 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 /** 默认验证证书；历史服务兼容必须由宿主显式关闭，包含证书链与主机名。 */
-fun createAndroidHttpClientEngine(validateCertificates: Boolean = true): HttpClientEngine = OkHttp.create {
+fun createAndroidHttpClientEngine(): HttpClientEngine = createAndroidHttpClientEngine(true)
+
+fun createAndroidHttpClientEngine(validateCertificates: Boolean): HttpClientEngine = OkHttp.create {
     if (!validateCertificates) {
         val trustManager = object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit

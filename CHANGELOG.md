@@ -1,0 +1,9 @@
+# 变更记录
+
+## 1.1.0（待发布）
+
+- 保留 Android、iOS、OHOS 引擎工厂原有无参入口与证书验证行为，新增 `validateCertificates: Boolean` 显式重载。
+- 宿主传入 `false` 时，该引擎接受无效服务端证书；Android/OHOS 同时关闭主机名验证，iOS 仅接管 ServerTrust challenge，其他认证方式保持系统默认。
+- 增加本地自签名且主机名不符的 TLS 回归、原 JVM 无参方法兼容检查及三端独立消费者探针。
+
+尚未发布；源码验证、冻结候选、公开产物和设备验收分别记录。关闭验证的风险与恢复条件见 [README](README.md)。

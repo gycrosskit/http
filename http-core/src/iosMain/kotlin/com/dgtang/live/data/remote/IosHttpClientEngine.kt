@@ -12,7 +12,9 @@ import platform.Foundation.create
 import platform.Foundation.serverTrust
 
 /** 默认使用系统信任；兼容开关只处理服务端证书，不接管密码或客户端证书挑战。 */
-fun createIosHttpClientEngine(validateCertificates: Boolean = true): HttpClientEngine = Darwin.create {
+fun createIosHttpClientEngine(): HttpClientEngine = createIosHttpClientEngine(true)
+
+fun createIosHttpClientEngine(validateCertificates: Boolean): HttpClientEngine = Darwin.create {
     // 首次无线数据授权期间等待系统恢复连接，避免首个业务请求立即失败。
     configureSession {
         waitsForConnectivity = true
