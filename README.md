@@ -79,6 +79,8 @@ try {
 }
 ```
 
+三端引擎工厂新增候选参数 `validateCertificates: Boolean = true`。默认保留系统证书链和主机名验证；宿主确需兼容过期、自签名或无效证书时显式传 `false`，仅作用于该引擎，不改变全局 TLS、认证、重试和关闭语义。关闭后无法确认服务端身份，可能被中间人读取或篡改；后端完成证书治理后应统一恢复默认。此能力尚未发布，不能按上方 `1.0.0` 坐标消费。
+
 `expectSuccess=false`，HTTP 非 2xx 仍返回响应；不要把请求受理或网络成功当作业务成功。超时映射为 `HttpTransportException(TIMEOUT)`，外部取消继续抛出 `CancellationException`。默认零重试；显式重试只覆盖网络异常、超时与 5xx，不用于提交、支付、领取等非幂等请求。
 
 公开工厂/扩展签名包含 Ktor 类型，因此 `ktor-client-core` 作为 `api` 依赖传递。Ktor 插件和各端引擎实现保留内部依赖。包名保持 `com.dgtang.live.data.remote`，便于宿主保持现有调用。
