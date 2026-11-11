@@ -4,6 +4,7 @@ package com.dgtang.live.data.remote
 
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
+import kotlinx.cinterop.convert
 import platform.Foundation.NSURLAuthenticationMethodServerTrust
 import platform.Foundation.NSURLCredential
 import platform.Foundation.NSURLSessionAuthChallengePerformDefaultHandling
@@ -23,9 +24,9 @@ fun createIosHttpClientEngine(validateCertificates: Boolean): HttpClientEngine =
         handleChallenge { _, _, challenge, completion ->
             val trust = challenge.protectionSpace.serverTrust()
             if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust && trust != null) {
-                completion(NSURLSessionAuthChallengeUseCredential, NSURLCredential.create(trust = trust))
+                completion(NSURLSessionAuthChallengeUseCredential.convert(), NSURLCredential.create(trust = trust))
             } else {
-                completion(NSURLSessionAuthChallengePerformDefaultHandling, null)
+                completion(NSURLSessionAuthChallengePerformDefaultHandling.convert(), null)
             }
         }
     }
