@@ -1,5 +1,7 @@
 # HTTP
 
+新版 Maven 发布由 Jenkins 生成同版本归档、`source-receipt.json` 和 `SHA256SUMS`。JitPack 核对标签来源、归档尺寸和摘要后安装同一份制品。历史发布按原版本 Tag 复验。
+
 提供 Android、iOS、OpenHarmony 共用的 HTTP 契约、Ktor 传输、平台引擎、上传及失败分类。`http-core` 不提供 UI 或 Kuikly Module；业务 URL、品牌、登录凭据、隐私同意、日志脱敏与请求策略由宿主负责。
 
 当前正式版本 **1.1.0 已发布**，可从 JitPack 按下列固定坐标接入。公开产物核验及 Mac 独立消费者编译已通过，Linux 消费验证延后，完整平台验收尚未完成；宿主实际传输、接线和设备业务仍须分别验收。平台合同见[功能与平台差异](docs/功能与平台差异.md)，构建、测试和发布入口见[开发与验证](docs/开发与验证.md)。
