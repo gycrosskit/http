@@ -1,0 +1,82 @@
+#AOCI-CODE-VOLUME: 1
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/===
+.gitattributes[FC4T]: F:强制文本检出为 LF，保持 AOCI 字节指纹跨平台一致 | R:- | A:- | S:二进制仍由 Git 自动识别
+.gitignore[FC4T]: F:隔离构建缓存、归档与本机 Codex 连接配置 | R:- | A:- | S:本机 MCP 配置还须由 AOCI Scope 单独排除
+AGENTS.md[SW7S]: F:约束 HTTP 组件边界、受控验证与 AOCI 认知维护 | R:code:docs/开发与验证.md | A:- | S:索引语义由模型依据真实证据创作，完整交付与 Challenge 分别验收
+CHANGELOG.md[SN4T]: F:记录 1.1.0 证书兼容重载、二进制兼容与验收范围 | R:code:README.md | A:- | S:-
+LICENSE[SG3M]: F:声明 Apache 2.0 授权、分发条件和免责条款 | R:- | A:- | S:-
+README.md[SN7T]: F:提供HTTP三端安装、最小装配和宿主职责并链接AOCI与平台合同 | R:code:docs/功能与平台差异.md,code:docs/开发与验证.md | A:- | S:非2xx仍返回响应；默认验证证书，显式关闭仅作用于单个引擎，公开消费不等于设备业务验收
+build.gradle.kts[FV6T]: F:固定 KMP 与 Android 插件并配置统一 Maven staging 和许可证 | R:code:http-core/build.gradle.kts | A:- | S:版本取 VERSION 或 1.1.0，产物只写根 build/maven
+gradle.properties[FV4T]: F:设置 Gradle 内存、UTF-8 与 AndroidX 资源策略 | R:- | A:- | S:-
+gradlew[EV4S]: F:解析 Java 环境并在 Unix 启动 Gradle Wrapper | R:code:gradle/wrapper/gradle-wrapper.properties | A:- | S:-
+gradlew.bat[EV4T]: F:在 Windows 解析 Java 路径并转交 Gradle 参数与退出状态 | R:code:gradle/wrapper/gradle-wrapper.properties | A:- | S:-
+jitpack-install.sh[OV8T]: F:下载受管 Release 归档并核对来源、大小、摘要后安装 Maven 字节 | R:code:tests/test_jitpack_install.py | A:- | S:收据绑定 HEAD SHA 与 tree；拒绝重复字段、链接、越界路径和过量解包，校验先于目标写入
+jitpack.yml[FV5T]: F:指定 JDK 21 并交给受管归档安装入口构建 JitPack | R:code:jitpack-install.sh | A:- | S:-
+settings.gradle.kts[FV6T]: F:配置插件与依赖镜像并注册唯一 http-core 模块 | R:code:http-core/build.gradle.kts | A:- | S:Kuikly 使用独占腾讯仓读取完整 module，不得回落至仅 POM 镜像
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/docs/===
+功能与平台差异.md[SN8T]: F:维护请求预算、取消、重试、平台失败与证书兼容合同 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorHttpTransport.kt | A:- | S:关闭证书验证仅作用于单个引擎，系统 TLS 和联网策略仍可拒绝请求
+开发与验证.md[SV7T]: F:定义轻量、受控 SDK、冻结归档及独立消费的验收入口 | R:code:scripts/archive-prebuilt.sh,code:verification-consumer/build.gradle.kts | A:- | S:Mac 消费与 Linux、设备验收分别记录，旧版本证据不覆盖 1.1.0
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/gradle/wrapper/===
+gradle-wrapper.properties[FV5T]: F:固定 Gradle 8.11.1 下载位置与分发摘要 | R:code:gradlew,code:gradlew.bat | A:- | S:-
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/===
+build.gradle.kts[FV7T]: F:构建 http-core 三端 KMP 变体并传递公开 Ktor 核心依赖 | R:code:build.gradle.kts | A:- | S:公开签名含 Ktor 类型，ktor-client-core 必须保持 api；Android 运行字节码为 JVM 11
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/src/androidMain/kotlin/com/dgtang/live/data/remote/===
+AndroidHttpClientEngine.kt[IN8T]: F:构造 OkHttp 引擎并提供显式证书兼容重载 | R:code:http-core/src/androidUnitTest/kotlin/com/dgtang/live/data/remote/AndroidTlsCompatibilityTest.kt | A:createAndroidHttpClientEngine | S:必须保留真实无参 JVM 方法；false 同时跳过证书链与主机名验证
+PlatformHttpFailure.android.kt[IN6T]: F:将 Android 超时、TLS 与连接 IO 异常映射为稳定原因 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorFailureReason.kt | A:platformHttpFailureReason | S:先判断 SocketTimeout 和 SSL，避免被通用 IOException 覆盖
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/src/androidUnitTest/kotlin/com/dgtang/live/data/remote/===
+AndroidTlsCompatibilityTest.kt[TN7T]: F:用本地错误主机名证书检查默认拒绝、显式接受与无参二进制入口 | R:code:http-core/src/androidMain/kotlin/com/dgtang/live/data/remote/AndroidHttpClientEngine.kt | A:originalNoArgumentJvmFactoryRemainsAvailable,defaultRejectsAndExplicitCompatibilityAcceptsUntrustedWrongHostCertificate | S:测试 fixture 仅用于本地 TLS，不能证明 iOS 或 OHOS 设备行为
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/===
+AppHttpClient.kt[LN8S]: F:定义请求响应、上下文、上传源、拦截器与独立期限执行合同 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorHttpTransport.kt | A:AppHttpClient,AppHttpRequest,AppHttpResponse,AppHttpRequestBuilder,withHttpTimeout | S:超时只映射本次期限产生的取消，调用方取消继续传播；默认零重试
+HttpClientFactory.kt[LN7T]: F:以注入引擎创建 Ktor Client 并安装 JSON 和关闭默认重试 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpRequestRetry.kt | A:createHttpClient | S:expectSuccess=false 保留非 2xx 响应，宿主 configure 最后执行
+HttpJson.kt[LN6T]: F:提供容忍未知字段的默认 JSON 与平台无关失败原因枚举 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/AppHttpClient.kt | A:AppJson,HttpFailureReason | S:失败原因不携带业务状态或宿主会话类型
+HttpMultipartContent.kt[LN6T]: F:描述 Multipart 字段、字节附件与可选流式上传源 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorHttpTransport.kt | A:HttpMultipartFile,HttpMultipartContent | S:宿主持有文件句柄与权限，组件只接收数据或写出协议
+HttpRequestRetry.kt[LN7T]: F:为显式幂等请求启用网络、超时和 5xx 的有限指数退避 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpClientFactory.kt | A:enableIdempotentRetry | S:次数为首次请求后的额外尝试，4xx 与解析失败不应重发
+KtorFailureReason.kt[IN7T]: F:遍历异常因果链并统一 Ktor、序列化与平台失败分类 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpJson.kt | A:transportFailureReason | S:循环因果链按已访问集合终止，平台原因按超时、TLS、网络排序
+KtorHttpTransport.kt[IN9S]: F:执行拦截、期限、Ktor 请求与上传，读取响应并分类失败 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/AppHttpClient.kt,code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpRequestRetry.kt | A:httpTransport,decodeNonUtf8Text | S:请求拦截后恢复原 context；准备与传输分别计时；观察回调逆序且取消不吞；流上传异常须取消 ByteChannel
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/src/commonTest/kotlin/com/dgtang/live/data/remote/===
+HttpTransportTest.kt[TN8M]: F:验证拦截顺序、期限、取消、重试、JSON、上传与宿主 hook 合同 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorHttpTransport.kt | A:HttpTransportTest | S:MockEngine 不证明真实引擎联网；解析失败不得触发重发，准备与传输均要响应外部取消
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/src/iosMain/kotlin/com/dgtang/live/data/remote/===
+IosHttpClientEngine.kt[IN8T]: F:创建等待系统联网的 Darwin 引擎并提供证书兼容开关 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpClientFactory.kt | A:createIosHttpClientEngine | S:false 只接管具有 trust 的 ServerTrust challenge，密码和客户端证书仍交系统默认处理
+PlatformHttpFailure.ios.kt[IN6T]: F:根据 Darwin NSError 错误码映射超时、安全连接和网络失败 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorFailureReason.kt | A:platformHttpFailureReason | S:只处理 DarwinHttpRequestException 原始错误码，不依赖本地化描述
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/http-core/src/ohosArm64Main/kotlin/com/dgtang/live/data/remote/===
+OhosHttpClientEngine.kt[IN8T]: F:创建 Curl 引擎并保留无参入口及显式 sslVerify 控制 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpClientFactory.kt | A:createOhosHttpClientEngine | S:sslVerify=false 同时关闭证书链与主机名验证，默认 true
+PlatformHttpFailure.ohos.kt[IN5T]: F:保留 OHOS 平台异常映射扩展点，由共享 Ktor 分类处理现有失败 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorFailureReason.kt | A:platformHttpFailureReason | S:当前始终返回 null，不能据此宣称存在 Curl 专属错误码映射
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/scripts/===
+archive-prebuilt.sh[OV7T]: F:在空 staging 发布完整 Maven 变体并归档和计算 SHA256 | R:code:scripts/check-maven.py,code:scripts/jitpack-metadata.py | A:- | S:VERSION 必须显式且不可变，已有 staging 或同名归档即拒绝，不覆盖旧证据
+build.sh[EV6T]: F:分派 Android、iOS、Harmony 生产编译及 Maven 打包命令 | R:code:scripts/archive-prebuilt.sh | A:- | S:单次只选一个平台，compile 不串联测试或消费，缓存沿用调用方环境
+check-maven.py[OV8S]: F:校验 Maven publication 集合、变体指向、文件摘要、许可证和字节码 | R:code:scripts/archive-prebuilt.sh,code:scripts/test-check-maven.py | A:check_sidecars,check_jvm_bytecode,resolve_artifact | S:SNAPSHOT 解析当前时间戳文件；共享二进制摘要只读一次但每个 variant 声明独立校验；AAR 内嵌 JAR 也检查
+jitpack-metadata.py[OV7T]: F:移除 JitPack 无法保留 classifier 的源码和空资源变体并更新 sidecar | R:code:scripts/test-jitpack-metadata.py | A:normalize | S:先验证全部资源再写入；非空资源拒绝，不能删除真实资源来伪造兼容
+test-archive-prebuilt.py[TV6T]: F:用替身 Gradle 和真实 tar 校验归档准入、顺序、摘要与防覆盖 | R:code:scripts/archive-prebuilt.sh | A:ArchiveTest | S:替身不执行 SDK，不能作为真实 Maven 编译证据
+test-check-maven.py[TV7S]: F:构造损坏 publication、sidecar、引用和字节码验证 checker 拒绝路径 | R:code:scripts/check-maven.py | A:CheckerTest | S:同文件不同 variant 仍须分别验证，覆盖 Android 内嵌依赖 JAR 字节码与损坏 ZIP
+test-jitpack-metadata.py[TV6T]: F:验证 classifier 变体移除、空资源、幂等性及摘要更新 | R:code:scripts/jitpack-metadata.py | A:PublicationContracts | S:非空资源或缺失重定向必须失败且保留原 metadata 字节
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/tests/===
+test_jitpack_install.py[TV8S]: F:用本地冻结归档验证 Release 来源绑定和安全解包拒绝行为 | R:code:jitpack-install.sh | A:JitPackInstallTest | S:覆盖目标已有软链逃逸、非法 UTF-8、重复字段、收据篡改和特殊成员，失败不安装产物
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/verification-consumer/===
+build.gradle.kts[TV6T]: F:构建只依赖已发布 http-core 的三端独立消费者 | R:code:verification-consumer/settings.gradle.kts,code:verification-consumer/src/commonMain/kotlin/Probe.kt | A:- | S:不直接声明 Ktor 主依赖，用编译检查公开 API 传递依赖闭包
+gradle.properties[FV3T]: F:设置独立消费者的 JVM 内存、UTF-8 和 AndroidX 属性 | R:- | A:- | S:-
+settings.gradle.kts[TV7T]: F:为独立消费者固定插件来源与候选或 JitPack 组件仓 | R:code:verification-consumer/build.gradle.kts | A:- | S:组件 group 独占 httpMavenRepo 或 JitPack，候选缺失不能回退远端旧版本
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/verification-consumer/src/androidMain/kotlin/===
+PlatformProbe.kt[TN5T]: F:编译验证 Android 无参和显式兼容引擎重载可供产物消费者调用 | R:code:http-core/src/androidMain/kotlin/com/dgtang/live/data/remote/AndroidHttpClientEngine.kt | A:platformTransport,compatibilityTransport | S:-
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/verification-consumer/src/commonMain/kotlin/===
+Probe.kt[TN7T]: F:通过公开 Ktor 类型组装传输并检查上下文身份及关闭调用 | R:code:http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/AppHttpClient.kt | A:transport,executeAndClose | S:未直接依赖 Ktor，用真实 Maven 解析暴露 api 依赖缺口
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/verification-consumer/src/iosMain/kotlin/===
+PlatformProbe.kt[TN5T]: F:编译验证 iOS 无参和显式证书兼容重载的公开可用性 | R:code:http-core/src/iosMain/kotlin/com/dgtang/live/data/remote/IosHttpClientEngine.kt | A:platformTransport,compatibilityTransport | S:-
+
+===/Users/guoyang/.codex/worktrees/aoci-http/http/verification-consumer/src/ohosArm64Main/kotlin/===
+PlatformProbe.kt[TN5T]: F:编译验证 OHOS 无参和显式证书兼容重载的公开可用性 | R:code:http-core/src/ohosArm64Main/kotlin/com/dgtang/live/data/remote/OhosHttpClientEngine.kt | A:platformTransport,compatibilityTransport | S:-
