@@ -8,45 +8,9 @@
 
 ## 架构与调用流程
 
-```mermaid
-flowchart LR
-    Host[宿主鉴权与请求策略] --> Contract[AppHttpClient]
-    Contract --> Transport[Ktor 传输]
-    Transport --> Android[Android OkHttp]
-    Transport --> Apple[iOS Darwin]
-    Transport --> Harmony[OpenHarmony Curl]
-```
+宿主持有 Client、鉴权及请求策略；`AppHttpClient` 统一请求合同，`httpTransport` 连接 Android OkHttp、iOS Darwin 和 OHOS Curl。取消随调用协程传播，owner 结束时关闭 Client。
 
-宿主安装拦截器并持有 Client；组件负责传输和错误映射，取消随调用协程传播。
-
-```mermaid
-sequenceDiagram
-    participant Host as 宿主
-    participant Core as AppHttpClient
-    participant Engine as 平台引擎
-    Host->>Core: execute(request)
-    Core->>Core: 校验预算与执行拦截器
-    Core->>Engine: 传输（仅显式幂等请求重试）
-    Engine-->>Core: 响应或错误
-    Core-->>Host: AppHttpResponse 或异常
-    Host->>Core: close()
-```
-
-[`AppHttpClient`](http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/AppHttpClient.kt) 是业务契约；[`createHttpClient`](http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/HttpClientFactory.kt) 与 [`httpTransport`](http-core/src/commonMain/kotlin/com/dgtang/live/data/remote/KtorHttpTransport.kt) 用于宿主装配。
-
-```mermaid
-classDiagram
-    class AppHttpClient {
-        execute(request) AppHttpResponse
-        close()
-    }
-    class AppHttpRequest
-    class AppHttpResponse
-    class HttpInterceptor
-    AppHttpClient ..> AppHttpRequest : 消费
-    AppHttpClient ..> AppHttpResponse : 返回
-    HttpInterceptor ..> AppHttpRequest : 扩展
-```
+文件职责和调用关系见 [AOCI 索引](aoci.txt)，平台行为与重试边界见[功能与平台差异](docs/功能与平台差异.md)。
 
 ## 安装与最小使用
 
@@ -89,6 +53,6 @@ try {
 
 ## 验证与反馈
 
-保留传输、超时、取消、JSON、上传及宿主 hook 的通用回归，并补默认/显式重试边界回归。独立 `verification-consumer` 不直接声明 Ktor、coroutines、serialization 主依赖，检验公开 API 的产物传递依赖。**1.1.0 已通过公开产物核验与 Mac 独立消费者编译；Linux 消费验证延后**；轻量脚本、组件消费与宿主实际传输及设备验收分别记录，不能互相替代。
+回归、独立消费命令及各版本证据统一见[开发与验证](docs/开发与验证.md)；组件消费、宿主实际传输和设备验收分别记录。
 
 发行入口：[1.1.0 Release](https://github.com/gycrosskit/http/releases/tag/1.1.0)。问题反馈请通过 [Issues](https://github.com/gycrosskit/http/issues) 提供脱敏输入、平台、精确版本及异常原因；不要上传凭据或用户正文。源码抽离自宿主 `c768cb12c86e59b60fbc69149013850edce509b0`，许可证为 [Apache-2.0](LICENSE)。
